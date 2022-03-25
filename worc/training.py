@@ -22,11 +22,11 @@ feature_dataset = FeatureDataset(
     task_name=f"{dataset_name}",
     meta_columns=["subject_id", "label"],
 )
-split_path = config.RESULT_DIR / "splits.json"
+split_path = config.RESULT_DIR / dataset_name / "splits.json"
 feature_dataset.full_split(split_path)
 feature_dataset.load_splits_from_json(split_path)
 model = MLClassifier.from_sklearn(name="Random Forest")
-model.set_optimizer("optuna", n_trials=10)
+model.set_optimizer("optuna", n_trials=5)
 
 trainer = Trainer(
     dataset=feature_dataset,
@@ -34,7 +34,7 @@ trainer = Trainer(
     result_dir=config.RESULT_DIR,
     feature_selection="anova",
     num_features=10,
-    experiment_name="baseline",
+    experiment_name="test3",
 )
 
-trainer.optimize_cross_validation()
+trainer.run()

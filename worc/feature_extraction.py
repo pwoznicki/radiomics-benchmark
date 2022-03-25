@@ -25,11 +25,11 @@ for dataset in config.DATASETS:
     result_dir = config.RESULT_DIR / dataset
     result_dir.mkdir(exist_ok=True, parents=True)
 
-    image_dataset = ImageDataset.from_dataframe(
+    image_dataset = ImageDataset(
         df=df,
         image_colname="image_path",
         mask_colname="mask_path",
-        id_colname="subject_id",
+        ID_colname="subject_id",
     )
     # Feature extraction
     extraction_params = get_pyradiomics_param_file(dataset)
