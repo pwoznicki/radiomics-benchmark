@@ -4,18 +4,18 @@ from classrad.feature_extraction.extractor import FeatureExtractor
 
 import config
 
-dataset = "prostate-ucla"
+dataset = "prostatex"
 df = pd.read_csv(config.TABLE_DIR / dataset / "derived" / f"paths.csv")
-df = df.loc[~df.patient_ID.isin(config.EXCLUDED["ucla"])]
+df = df.loc[~df.case_ID.isin(config.EXCLUDED["prostatex"])]
 result_dir = config.RESULT_DIR / dataset
 result_dir.mkdir(exist_ok=True, parents=True)
 
 for roi in ["prostate", "lesion"]:
     image_dataset = ImageDataset(
         df=df,
-        image_colname="image_path",
-        mask_colname=f"{roi}_mask_path",
-        ID_colname="series_UID",
+        image_colname="T2_path",
+        mask_colname=f"T2_{roi}_mask_path",
+        ID_colname="finding_ID",
     )
     # Feature extraction
     extraction_params = "default_MR.yaml"
