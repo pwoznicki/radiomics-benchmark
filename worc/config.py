@@ -1,6 +1,6 @@
 from pathlib import Path
 
-BASE_DIR = Path("/media/pw-research/hdd/radiomics-benchmark")
+BASE_DIR = Path("/Users/p.woznicki/Documents/AI_Projects/radiomics-benchmark")
 WORC_DIR = BASE_DIR / "worc"
 DATASETS = ["CRLM", "Desmoid", "GIST", "Lipo", "Liver", "Melanoma"]
 MODALITY_MAP = {

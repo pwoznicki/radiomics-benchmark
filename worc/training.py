@@ -34,7 +34,7 @@ trainer = Trainer(
     result_dir=config.RESULT_DIR,
     feature_selection="anova",
     num_features=10,
-    experiment_name="test3",
+    experiment_name="exp1",
 )
 
 trainer.run()
