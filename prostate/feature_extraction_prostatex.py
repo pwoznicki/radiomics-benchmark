@@ -11,6 +11,7 @@ result_dir = config.RESULT_DIR / dataset
 result_dir.mkdir(exist_ok=True, parents=True)
 
 for roi in ["prostate", "lesion"]:
+    # Load dataframe
     image_dataset = ImageDataset(
         df=df,
         image_colname="T2_path",

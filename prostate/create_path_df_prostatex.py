@@ -41,7 +41,7 @@ def get_mask_path(case_ID, finding_ID, roi, modality="T2"):
         if alternative_path.exists():
             result = alternative_path
         else:
-            print("Warning: mask path does not exist:", result)
+            print("Warning: mask path does not exist, skipping:", result)
             return None
     return str(result)
 
@@ -84,6 +84,7 @@ def main():
             lambda x: get_mask_path(x["case_ID"], x["finding_ID"], roi, "T2"),
             axis=1,
         )
+    df.dropna(axis="rows", inplace=True)
     df.to_csv(
         config.TABLE_DIR / "prostatex" / "derived" / "paths.csv",
         index=False,
