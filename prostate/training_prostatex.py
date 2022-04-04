@@ -1,44 +1,70 @@
+from re import I
+
 import pandas as pd
 from classrad.data.dataset import FeatureDataset
 from classrad.models.classifier import MLClassifier
-from classrad.preprocessing.preprocessor import Preprocessor
-from classrad.training.trainer import Trainer
+from classrad.training.trainer import Inferrer, Trainer
+from classrad.utils import io
 
 import config
+import utils
+
+params = {
+    "prostatex": {
+        "ID_colname": "case_ID",
+        "split_on": "case_ID",
+        "prostate": {},
+    },
+    "prostate-ucla": {
+        "ID_colname": "series_UID",
+        "split_on": "patient_ID",
+    },
+}
 
 
 def main():
-    result_dir = config.RESULT_DIR / "prostatex"
-    df = pd.read_csv(result_dir / "prostate_features.csv")
-    # Load features from table
-    dataset = FeatureDataset(
-        dataframe=df,
-        target="label",
-        ID_colname="case_ID",
-    )
-    # Split and load splits
-    splits_path = result_dir / "splits.json"
-    dataset.full_split(save_path=splits_path)
-    dataset.load_splits_from_json(splits_path)
-    # Preprocessing
-    preprocessor = Preprocessor(
-        normalize=True,
-        feature_selection_method="anova",
-        n_features=10,
-        oversampling_method="SMOTE",
-    )
-    dataset._data = preprocessor.fit_transform(dataset.data)
+    tasks = ["prostatex", "prostate-ucla"]
+    for roi in ["prostate", "lesion"]:
+        dataset = {}
+        for task in tasks:
+            result_dir = config.RESULT_DIR / task / roi
+            df = pd.read_csv(result_dir / f"{roi}_features.csv")
+            df = utils.add_label_col(df)
+            # Load features from table
+            dataset[task] = FeatureDataset(
+                dataframe=df,
+                target="label",
+                ID_colname=params[task]["ID_colname"],
+            )
+            # Split and load splits
+            splits_path = result_dir / "splits.json"
+            split_on = params[task]["split_on"]
+            dataset[task].full_split(save_path=splits_path, split_on=split_on)
+            dataset[task].load_splits_from_json(splits_path, split_on=split_on)
+        for task in tasks:
+            result_dir = config.RESULT_DIR / task / roi
+            models = MLClassifier.initialize_default_sklearn_models()
+            trainer = Trainer(
+                dataset=dataset[task],
+                models=models,
+                result_dir=result_dir,
+                experiment_name=f"{task}_{roi}",
+            )
+            trainer.run_auto_preprocessing(oversampling=True)
+            trainer.set_optimizer("optuna", n_trials=100)
+            trainer.run(auto_preprocess=True)
 
-    model = MLClassifier.from_sklearn(name="Random Forest")
-    model.set_optimizer("optuna", n_trials=5)
-
-    trainer = Trainer(
-        dataset=dataset,
-        models=[model],
-        result_dir=result_dir,
-        experiment_name="ProstateX-test",
-    )
-    trainer.run()
+            best_params = io.load_json(result_dir / f"best_params.json")
+            inferrer = Inferrer(params=best_params, result_dir=result_dir)
+            inferrer.fit_eval(
+                dataset[task], json_filename=f"internal_test.json"
+            )
+            other_tasks = [t for t in tasks if t != task]
+            for other_task in other_tasks:
+                inferrer.fit_eval(
+                    dataset[other_task],
+                    json_filename=f"external_test_{other_task}.json",
+                )
 
 
 if __name__ == "__main__":
