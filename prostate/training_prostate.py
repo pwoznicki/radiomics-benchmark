@@ -9,21 +9,10 @@ from classrad.utils import io
 import config
 import utils
 
-params = {
-    "prostatex": {
-        "ID_colname": "case_ID",
-        "split_on": "case_ID",
-        "prostate": {},
-    },
-    "prostate-ucla": {
-        "ID_colname": "series_UID",
-        "split_on": "patient_ID",
-    },
-}
-
 
 def main():
-    tasks = ["prostatex", "prostate-ucla"]
+    tasks = ["prostate-ucla"]
+    params = config.PARAMS
     for roi in ["prostate", "lesion"]:
         dataset = {}
         for task in tasks:
