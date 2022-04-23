@@ -22,7 +22,7 @@ for roi in ["prostate", "lesion"]:
     extraction_params = "default_MR.yaml"
     extractor = FeatureExtractor(
         image_dataset,
-        out_path=(result_dir / f"{roi}_features.csv"),
+        out_path=(result_dir / roi / f"{roi}_features.csv"),
         extraction_params=extraction_params,
     )
     extractor.extract_features(num_threads=8)

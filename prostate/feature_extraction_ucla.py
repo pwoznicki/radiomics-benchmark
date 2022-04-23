@@ -6,7 +6,8 @@ import config
 
 dataset = "prostate-ucla"
 df = pd.read_csv(config.TABLE_DIR / dataset / "derived" / f"paths.csv")
-df = df.loc[~df.patient_ID.isin(config.EXCLUDED["ucla"])]
+df = df.loc[~df.patient_ID.isin(config.EXCLUDED["prostate-ucla"])]
+df.drop_duplicates(subset="patient_ID", inplace=True)
 result_dir = config.RESULT_DIR / dataset
 result_dir.mkdir(exist_ok=True, parents=True)
 
@@ -21,7 +22,7 @@ for roi in ["prostate", "lesion"]:
     extraction_params = "default_MR.yaml"
     extractor = FeatureExtractor(
         image_dataset,
-        out_path=(result_dir / f"{roi}_features.csv"),
+        out_path=(result_dir / roi / f"{roi}_features.csv"),
         extraction_params=extraction_params,
     )
     extractor.extract_features(num_threads=8)
