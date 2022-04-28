@@ -1,9 +1,9 @@
 import pandas as pd
-from classrad.data.dataset import FeatureDataset
-from classrad.models.classifier import MLClassifier
-from classrad.preprocessing.preprocessor import Preprocessor
-from classrad.training.trainer import Inferrer, Trainer
-from classrad.utils import io
+from autorad.data.dataset import FeatureDataset
+from autorad.models.classifier import MLClassifier
+from autorad.preprocessing.preprocessor import Preprocessor
+from autorad.training.trainer import Inferrer, Trainer
+from autorad.utils import io
 
 import config
 

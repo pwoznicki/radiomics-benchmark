@@ -11,3 +11,13 @@ EXCLUDED = {
     "ucla": ["Prostate-MRI-US-Biopsy-0473", "Prostate-MRI-US-Biopsy-0702"],
     "prostatex": [],
 }
+PARAMS = {
+    "prostatex": {
+        "ID_colname": "case_ID",
+        "split_on": "case_ID",
+    },
+    "prostate-ucla": {
+        "ID_colname": "series_UID",
+        "split_on": "patient_ID",
+    },
+}

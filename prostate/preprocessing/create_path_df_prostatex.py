@@ -1,8 +1,7 @@
 from pathlib import Path
 
-import pandas as pd
-
 import config
+import pandas as pd
 
 
 def get_image_path(case_ID, modality, image_names):
@@ -74,17 +73,18 @@ def main():
         config.TABLE_DIR / "prostatex" / "Image_list.csv"
     )
     image_names["case_ID"] = image_names["T2"].apply(lambda x: x.split("_")[0])
-    for modality in ["T2", "ADC"]:
-        df[f"{modality}_path"] = df.apply(
-            lambda x: get_image_path(x["case_ID"], modality, image_names),
-            axis=1,
-        )
+    # use only T2 images
+    modality = "T2"
+    df[f"image_path"] = df.apply(
+        lambda x: get_image_path(x["case_ID"], modality, image_names),
+        axis=1,
+    )
     for roi in ["prostate", "lesion"]:
-        df[f"T2_{roi}_mask_path"] = df.apply(
+        df[f"{roi}_mask_path"] = df.apply(
             lambda x: get_mask_path(x["case_ID"], x["finding_ID"], roi, "T2"),
             axis=1,
         )
-    df.dropna(axis="rows", inplace=True)
+    df.dropna(axis="index", inplace=True)
     df.to_csv(
         config.TABLE_DIR / "prostatex" / "derived" / "paths.csv",
         index=False,

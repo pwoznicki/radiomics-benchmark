@@ -1,29 +1,18 @@
 from re import I
 
 import pandas as pd
-from classrad.data.dataset import FeatureDataset
-from classrad.models.classifier import MLClassifier
-from classrad.training.trainer import Inferrer, Trainer
-from classrad.utils import io
+from autorad.data.dataset import FeatureDataset
+from autorad.models.classifier import MLClassifier
+from autorad.training.trainer import Inferrer, Trainer
+from autorad.utils import io
 
 import config
 import utils
 
-params = {
-    "prostatex": {
-        "ID_colname": "case_ID",
-        "split_on": "case_ID",
-        "prostate": {},
-    },
-    "prostate-ucla": {
-        "ID_colname": "series_UID",
-        "split_on": "patient_ID",
-    },
-}
-
 
 def main():
     tasks = ["prostatex", "prostate-ucla"]
+    params = config.PARAMS
     for roi in ["prostate", "lesion"]:
         dataset = {}
         for task in tasks:
@@ -56,14 +45,12 @@ def main():
 
             best_params = io.load_json(result_dir / f"best_params.json")
             inferrer = Inferrer(params=best_params, result_dir=result_dir)
-            inferrer.fit_eval(
-                dataset[task], json_filename=f"internal_test.json"
-            )
+            inferrer.fit_eval(dataset[task], result_name=f"internal_test.json")
             other_tasks = [t for t in tasks if t != task]
             for other_task in other_tasks:
                 inferrer.fit_eval(
                     dataset[other_task],
-                    json_filename=f"external_test_{other_task}.json",
+                    result_name=f"external_test_{other_task}.json",
                 )
 
 

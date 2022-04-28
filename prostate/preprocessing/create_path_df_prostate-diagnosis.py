@@ -1,5 +1,5 @@
 import pandas as pd
-from classrad.utils import utils
+from autorad.utils import utils
 
 import config
 
