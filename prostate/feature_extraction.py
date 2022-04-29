@@ -4,11 +4,11 @@ from autorad.feature_extraction.extractor import FeatureExtractor
 
 import config
 
-datasets = ["prostatex", "prostate-ucla"]
-for dataset in datasets:
-    df = pd.read_csv(config.TABLE_DIR / dataset / "derived" / f"paths.csv")
+tasks = ["prostatex", "prostate-ucla"]
+for task in tasks:
+    df = pd.read_csv(config.TABLE_DIR / task / "derived" / f"paths.csv")
     df = df.loc[~df.case_ID.isin(config.EXCLUDED["prostatex"])]
-    result_dir = config.RESULT_DIR / dataset
+    result_dir = config.RESULT_DIR / task
     result_dir.mkdir(exist_ok=True, parents=True)
 
     for roi in ["prostate", "lesion"]:

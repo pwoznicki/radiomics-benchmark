@@ -30,12 +30,12 @@ def main():
             experiment_name=task_name,
         )
         trainer.run_auto_preprocessing(oversampling=False)
-        trainer.set_optimizer("optuna", n_trials=100)
+        trainer.set_optimizer("optuna", n_trials=200)
         trainer.run(auto_preprocess=True)
 
         best_params = io.load_json(result_dir / "best_params.json")
         inferrer = Inferrer(params=best_params, result_dir=result_dir)
-        inferrer.fit_eval(feature_dataset)
+        inferrer.fit_eval(feature_dataset, result_name="test_results")
 
 
 if __name__ == "__main__":
