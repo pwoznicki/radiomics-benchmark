@@ -44,7 +44,7 @@ git checkout 43b55e454410d78831fd184d8010f23af91e5144
 cp -r Files/lesions/* <your_base_dir>/prostate/data/prostatex/lesion
 cp -r Files/prostate <your_base_dir>/prostate/data/prostatex/
 cp -r Files/lesions/*.csv <your_base_dir>/prostate/tables/prostatex/
-
+```
 #### Preprocessing:
 1. Prostate-UCLA requires conversion to Nifti:
 - Convert dicom images to nifti (will be saved in <your_base_dir>/prostate/data/prostate-ucla/nifti/)):
@@ -68,4 +68,7 @@ python create_path_df_prostatex.py
 ```
 python feature_extraction.py
 ```
-
+#### Training:
+```
+python training.py
+```
