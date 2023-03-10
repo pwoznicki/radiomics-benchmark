@@ -56,8 +56,10 @@ def create_path_df_for_single_dataset(dataset):
         result_dict["image_path"].append(image_path.as_posix())
         result_dict["mask_path"].append(mask_path.as_posix())
     df_result = pd.DataFrame(result_dict)
+    table_dir = config.WORC_DIR / "tables" / "derived"
+    table_dir.mkdir(exist_ok=True, parents=True)
     df_result.to_csv(
-        config.WORC_DIR / "tables" / "derived" / f"{dataset}_paths.csv",
+        table_dir / f"{dataset}_paths.csv",
         index=False,
     )
 

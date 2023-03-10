@@ -1,6 +1,6 @@
 from pathlib import Path
 
-BASE_DIR = Path("/media/pw-research/hdd/radiomics-benchmark")
+BASE_DIR = Path("/mnt/hard/AI_Projects/UKW/rad-benchmark-test/")
 WORC_DIR = BASE_DIR / "worc"
 DATASETS = ["CRLM", "Desmoid", "GIST", "Lipo", "Liver", "Melanoma"]
 MODALITY_MAP = {
@@ -12,6 +12,7 @@ MODALITY_MAP = {
     "Melanoma": "CT",
 }
 RESULT_DIR = WORC_DIR / "results"
+RESULT_DIR.mkdir(parents=True, exist_ok=True)
 EXCLUDED_SUBJECTS = [
     "Melanoma-037",
     "Melanoma-039",

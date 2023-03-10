@@ -69,17 +69,19 @@ def main():
     ]
     path_df.rename(
         {
-            "Patient Number": "patient_ID",
+            "Patient Number": "case_ID",
             "gleason": "max_gleason",
             "Series Instance UID (MRI)": "series_UID",
         },
         axis="columns",
         inplace=True,
     )
-    path_df.sort_values(by="patient_ID", inplace=True)
+    path_df.sort_values(by="case_ID", inplace=True)
     path_df.dropna(inplace=True)
+    save_dir = config.TABLE_DIR / "prostate-ucla" / "derived"
+    save_dir.mkdir(parents=True, exist_ok=True)
     path_df.to_csv(
-        str(config.TABLE_DIR / "prostate-ucla" / "derived" / "paths.csv"),
+        str(save_dir / "paths.csv"),
         index=False,
     )
 

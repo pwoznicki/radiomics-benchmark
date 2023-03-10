@@ -1,8 +1,8 @@
 from pathlib import Path
 
-BASE_DIR = Path("/media/pw-research/hdd/radiomics-benchmark")
+BASE_DIR = Path("/mnt/hard/AI_Projects/UKW/rad-benchmark-test/")
 PROSTATE_DIR = BASE_DIR / "prostate"
-DATASETS = ["prostate-diagnosis", "prostate-ucla", "prostatex"]
+DATASETS = ["prostate-ucla", "prostatex"]
 MODALITY_MAP = {}
 DATA_DIR = PROSTATE_DIR / "data"
 RESULT_DIR = PROSTATE_DIR / "results"
@@ -24,17 +24,7 @@ PARAMS = {
     },
     "prostate-ucla": {
         "ID_colname": "series_UID",
-        "split_on": "patient_ID",
-        "oversampling": False,
-    },
-}
-PARAMS = {
-    "prostatex": {
-        "ID_colname": "case_ID",
         "split_on": "case_ID",
-    },
-    "prostate-ucla": {
-        "ID_colname": "series_UID",
-        "split_on": "patient_ID",
+        "oversampling": False,
     },
 }
